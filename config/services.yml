@@ -1,0 +1,13 @@
+services:
+    tatiana5.updateattachment.listener:
+        class: tatiana5\updateattachment\event\listener
+        arguments:
+            - '@auth'
+            - '@config'
+            - '@dbal.conn'
+            - '@template'
+            - '@request'
+            - '@user'
+        tags:
+            - { name: event.listener }
+ 

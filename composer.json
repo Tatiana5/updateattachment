@@ -1,0 +1,29 @@
+{
+    "name": "tatiana5/updateattachment",
+    "type": "phpbb-extension",
+    "description": "Update attachment",
+    "version": "1.0.0",
+    "time": "2025-12-29",
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "Татьяна5",
+            "homepage": "http://www.phpbbguru.net/community/",
+            "role": "Development"
+        },
+		{
+            "name": "rxu",
+            "homepage": "http://www.phpbbguru.net/community/",
+            "role": "Development"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "display-name": "Update attachment",
+        "soft-require": {
+        "phpbb/phpbb": "3.3.*@dev"
+        }
+    }
+}
