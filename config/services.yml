@@ -11,4 +11,3 @@ services:
             - '@attachment.manager'
         tags:
             - { name: event.listener }
- 
