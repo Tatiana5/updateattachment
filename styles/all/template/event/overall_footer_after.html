@@ -1,0 +1,10 @@
+<!-- IF S_IN_POSTING and S_SHOW_ATTACH_BOX and FILTERS -->
+<script>
+	var updateatt = {};
+	updateatt.lang = {
+		INFORMATION: '{{ lang("INFORMATION")|addslashes }}',
+		UPDATE_TOO_MANY_ATTACHMENTS: '{{ lang("UPDATE_TOO_MANY_ATTACHMENTS")|addslashes }}'
+	};	
+</script>
+{% INCLUDEJS '@tatiana5_updateattachment/updateattachment.js' %}
+<!-- ENDIF -->

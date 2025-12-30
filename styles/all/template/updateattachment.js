@@ -1,0 +1,104 @@
+$(document).ready(function() {
+	var add_files_flag = true;
+	$('#update_file_button').click(function() {
+		$('.update_file').each(function() {
+			$(this).removeAttr('style')
+		});
+	});
+
+	$('.update_file input').click(function() {
+		add_files_flag = false;
+		phpbb.plupload.updateMultipartParams({ update_file: $(this).attr('value') });
+		$('#add_files').click();
+	});
+		
+	phpbb.plupload.uploader.bind('FilesAdded', function (up, files) {
+		if ($('input[type="radio"][name="update_file"]:checked').length)
+		{
+			var i = up.files.length;
+
+			if (i > 1) {
+				plupload.each(files, function (file) {
+					up.removeFile(file);
+				});
+					
+				$('.attach-row').each(function() {
+					if (typeof $(this).attr('data-attach-id') === 'undefined') {
+						$(this).remove();
+					}
+				});
+					
+				$('input[type="radio"][name="update_file"]').each(function(){
+					$(this).prop('checked', false);
+					$(this).parent().attr('style', 'display: none;');
+				});
+				add_files_flag = true;
+
+				phpbb.alert(updateatt.lang.INFORMATION, updateatt.lang.UPDATE_TOO_MANY_ATTACHMENTS );
+			}
+		}
+	});
+		
+	$('#add_files').click(function() {
+		if (add_files_flag)
+		{
+			$('input[type="radio"][name="update_file"]').each(function(){
+				$(this).prop('checked', false);
+				$(this).parent().attr('style', 'display: none;');
+			});
+		}
+	});
+		
+	phpbb.plupload.uploader.bind('UploadComplete', function(up, file) {
+		function updateBbcode() {
+			var	textarea = $('#message', phpbb.plupload.form),
+				text = textarea.val();
+
+			// Return if the bbcode isn't used at all.
+			if (text.indexOf('[attachment=') === -1) {
+				return;
+			}
+
+			function runUpdate(i) {
+				var regex = new RegExp('\\[attachment=' + i + '\\](.*?)\\[\\/attachment\\]', 'g');
+				text = text.replace(regex, function updateBbcode(_, fileName) {
+					// Remove the bbcode if the file was removed.
+					var newIndex = i - 1;
+					return '[attachment=' + newIndex + ']' + fileName + '[/attachment]';
+				});
+			}
+
+			// Loop forwards when removing and backwards when adding ensures we don't
+			// corrupt the bbcode index.
+			var i;
+			for (i = 0; i < phpbb.plupload.ids.length + 1; i++) {
+				runUpdate(i);
+			}
+
+			textarea.val(text);
+		};
+
+		if ($('input[type="radio"][name="update_file"]:checked').length)
+		{
+			if (typeof file[0] !== 'undefined') {
+				if (file[0].status === plupload.DONE) {
+						
+					$('.attach-row[id="' + file[0].id + '"]').slideUp(100, function() {
+						$('.attach-row[id="' + file[0].id + '"]').remove();
+					});
+					updateBbcode();
+
+					var update_row = $('input[type="radio"][name="update_file"]:checked').parents('.attach-row')[0];
+					$(update_row).find('.file-name a').html(file[0].name);
+					$(update_row).find('.file-size').html(plupload.formatSize(file[0].size));
+
+					$('input[type="radio"][name="update_file"]').each(function(){
+						$(this).prop('checked', false);
+						$(this).parent().attr('style', 'display: none;');
+					});
+					add_files_flag = true;
+				}
+			}
+		}
+	});
+});
