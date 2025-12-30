@@ -83,6 +83,7 @@ class listener implements EventSubscriberInterface
 		{
 			$this->sql_ary = $sql_ary = $event['sql_ary'];
 			unset($sql_ary['attach_comment']);
+			unset($sql_ary['filetime']);
 
 			$sql = 'SELECT attach_id, is_orphan, filesize, physical_filename, thumbnail
 						FROM ' . ATTACHMENTS_TABLE . '

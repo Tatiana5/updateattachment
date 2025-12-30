@@ -4,12 +4,23 @@ $(document).ready(function() {
 		$('.update_file').each(function() {
 			$(this).removeAttr('style')
 		});
+		$('#update_file_button').attr('disabled', 'disabled');
+		$('#update_file_button').addClass('disabled');
+		$('#add_files').attr('disabled', 'disabled');
+		$('#add_files').addClass('disabled');
 	});
 
 	$('.update_file input').click(function() {
 		add_files_flag = false;
 		phpbb.plupload.updateMultipartParams({ update_file: $(this).attr('value') });
 		$('#add_files').click();
+		$('#add_files').attr('disabled', 'disabled');
+		$('#add_files').addClass('disabled');
+	});
+
+	$('#add_files').click(function() {
+		$('#update_file_button').attr('disabled', 'disabled');
+		$('#update_file_button').addClass('disabled');
 	});
 		
 	phpbb.plupload.uploader.bind('FilesAdded', function (up, files) {
