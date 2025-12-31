@@ -31,7 +31,7 @@ $(document).ready(function() {
 					
 				$('input[type="radio"][name="update_file"]').each(function(){
 					$(this).prop('checked', false);
-					$(this).parent().attr('style', 'display: none;');
+					//$(this).parent().attr('style', 'display: none;');
 				});
 				add_files_flag = true;
 				phpbb.plupload.updateMultipartParams({ update_file: 0 });
