@@ -6,7 +6,7 @@ $(document).ready(function() {
 		});
 		$('#update_file_button').attr('disabled', 'disabled');
 		$('#update_file_button').addClass('disabled');
-		$('#add_files').attr('disabled', 'disabled');
+		//$('#add_files').attr('disabled', 'disabled');
 		$('#add_files').addClass('disabled');
 	});
 
@@ -15,7 +15,7 @@ $(document).ready(function() {
 		phpbb.plupload.updateMultipartParams({ update_file: $(this).attr('value') });
 		$('#add_files').click();
 		$('#add_files').attr('disabled', 'disabled');
-		$('#add_files').addClass('disabled');
+		//$('#add_files').addClass('disabled');
 	});
 
 	$('#add_files').click(function() {
