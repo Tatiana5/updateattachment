@@ -10,6 +10,8 @@ $(document).ready(function() {
 		add_files_flag = false;
 		phpbb.plupload.updateMultipartParams({ update_file: $(this).attr('value') });
 		$('#add_files').click();
+		$('#add_files').addClass('disabled');
+		$('#add_files').attr('disabled', 'disabled');
 	});
 		
 	phpbb.plupload.uploader.bind('FilesAdded', function (up, files) {
@@ -49,9 +51,6 @@ $(document).ready(function() {
 			});
 			phpbb.plupload.updateMultipartParams({ update_file: 0 });
 		}
-
-		//$('#update_file_button').attr('disabled', 'disabled');
-		//$('#update_file_button').addClass('disabled');
 	});
 		
 	phpbb.plupload.uploader.bind('UploadComplete', function(up, file) {
@@ -70,7 +69,6 @@ $(document).ready(function() {
 					// Remove the bbcode if the file was removed.
 					var newIndex = i - 1;
 					if (fileName == filename_old || (index_flag && newIndex == 0)) {
-						console.log(filename_new);
 						fileName = filename_new;
 					}
 					return '[attachment=' + newIndex + ']' + fileName + '[/attachment]';
@@ -89,10 +87,13 @@ $(document).ready(function() {
 
 		if ($('input[type="radio"][name="update_file"]:checked').length > 0)
 		{
+			$('#add_files').removeClass('disabled');
+			$('#add_files').removeAttr('disabled');
+			
 			if (typeof file[0] !== 'undefined') {
-				var index = file.length - 1; 
-				if (file[index].status === plupload.DONE) {
-						
+				var index = file.length - 1;
+				if (file[index].status === plupload.DONE) { 
+					console.log(file);
 					$('.attach-row[id="' + file[index].id + '"]').slideUp(100, function() {
 						$('.attach-row[id="' + file[index].id + '"]').remove();
 					});
@@ -102,19 +103,20 @@ $(document).ready(function() {
 					if (file.length == 1) {
 						var index_flag = true;
 					}
+
 					updateBbcode($(update_row).find('.file-name a').html(), file[index].name, index_flag);
 
 					$(update_row).find('.file-name a').html(file[index].name);
 					$(update_row).find('.file-size').html(plupload.formatSize(file[index].size));
-
-					$('input[type="radio"][name="update_file"]').each(function(){
-						$(this).prop('checked', false);
-						$(this).parent().attr('style', 'display: none;');
-					});
-					add_files_flag = true;
-					phpbb.plupload.updateMultipartParams({ update_file: 0 });
 				}
 			}
+
+			$('input[type="radio"][name="update_file"]').each(function(){
+				$(this).prop('checked', false);
+				$(this).parent().attr('style', 'display: none;');
+			});
+			add_files_flag = true;
+			phpbb.plupload.updateMultipartParams({ update_file: 0 });
 		}
 	});
 });
