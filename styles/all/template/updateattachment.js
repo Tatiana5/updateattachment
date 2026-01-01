@@ -16,7 +16,6 @@ $(document).ready(function() {
 		if ($('input[type="radio"][name="update_file"]:checked').length > 0)
 		{
 			var i = files.length;
-			console.log(files.length);
 
 			if (i > 1) {
 				plupload.each(files, function (file) {
@@ -51,12 +50,12 @@ $(document).ready(function() {
 			phpbb.plupload.updateMultipartParams({ update_file: 0 });
 		}
 
-		$('#update_file_button').attr('disabled', 'disabled');
-		$('#update_file_button').addClass('disabled');
+		//$('#update_file_button').attr('disabled', 'disabled');
+		//$('#update_file_button').addClass('disabled');
 	});
 		
 	phpbb.plupload.uploader.bind('UploadComplete', function(up, file) {
-		function updateBbcode() {
+		function updateBbcode(filename_old, filename_new, index_flag) {
 			var	textarea = $('#message', phpbb.plupload.form),
 				text = textarea.val();
 
@@ -65,11 +64,15 @@ $(document).ready(function() {
 				return;
 			}
 
-			function runUpdate(i) {
+			function runUpdate(i, filename_old, filename_new, index_flag) {
 				var regex = new RegExp('\\[attachment=' + i + '\\](.*?)\\[\\/attachment\\]', 'g');
 				text = text.replace(regex, function updateBbcode(_, fileName) {
 					// Remove the bbcode if the file was removed.
 					var newIndex = i - 1;
+					if (fileName == filename_old || (index_flag && newIndex == 0)) {
+						console.log(filename_new);
+						fileName = filename_new;
+					}
 					return '[attachment=' + newIndex + ']' + fileName + '[/attachment]';
 				});
 			}
@@ -78,7 +81,7 @@ $(document).ready(function() {
 			// corrupt the bbcode index.
 			var i;
 			for (i = 0; i < phpbb.plupload.ids.length + 1; i++) {
-				runUpdate(i);
+				runUpdate(i, filename_old, filename_new, index_flag);
 			}
 
 			textarea.val(text);
@@ -87,16 +90,22 @@ $(document).ready(function() {
 		if ($('input[type="radio"][name="update_file"]:checked').length > 0)
 		{
 			if (typeof file[0] !== 'undefined') {
-				if (file[0].status === plupload.DONE) {
+				var index = file.length - 1; 
+				if (file[index].status === plupload.DONE) {
 						
-					$('.attach-row[id="' + file[0].id + '"]').slideUp(100, function() {
-						$('.attach-row[id="' + file[0].id + '"]').remove();
+					$('.attach-row[id="' + file[index].id + '"]').slideUp(100, function() {
+						$('.attach-row[id="' + file[index].id + '"]').remove();
 					});
-					updateBbcode();
-
 					var update_row = $('input[type="radio"][name="update_file"]:checked').parents('.attach-row')[0];
-					$(update_row).find('.file-name a').html(file[0].name);
-					$(update_row).find('.file-size').html(plupload.formatSize(file[0].size));
+					
+					var index_flag = false;
+					if (file.length == 1) {
+						var index_flag = true;
+					}
+					updateBbcode($(update_row).find('.file-name a').html(), file[index].name, index_flag);
+
+					$(update_row).find('.file-name a').html(file[index].name);
+					$(update_row).find('.file-size').html(plupload.formatSize(file[index].size));
 
 					$('input[type="radio"][name="update_file"]').each(function(){
 						$(this).prop('checked', false);

@@ -1,4 +1,4 @@
-<!-- IF S_IN_POSTING and S_SHOW_ATTACH_BOX and FILTERS -->
+<!-- IF S_IN_POSTING and S_SHOW_ATTACH_BOX and FILTERS and .attach_row -->
 <style>
 	.attach-panel-multi {
 		float: left;
@@ -6,6 +6,10 @@
 
 	.update_file input {
 		margin-top: -3px;
+	}
+
+	.nojs .attach-panel-multi:has(#update_file_button) {
+		display: none !important;
 	}
 </style>
 <!-- ENDIF -->

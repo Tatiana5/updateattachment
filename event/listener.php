@@ -122,13 +122,16 @@ class listener implements EventSubscriberInterface
 
 			$attach_id_new = (int) $attachment_data[0]['attach_id'];
 			$this->db->sql_query('DELETE FROM ' . ATTACHMENTS_TABLE . ' WHERE attach_id = ' . $attach_id_new);
-			array_splice($attachment_data, 0, 1);
+			//array_splice($attachment_data, 0, 1);
+			unset($attachment_data[0]);
+			$attachment_data = array_values($attachment_data);
 
 			foreach ($attachment_data as $key => $value)
 			{
 				if ($value['attach_id'] == $attach_id_old)
 				{
 					$attachment_data[$key]['real_filename'] = $this->sql_ary['real_filename'];
+					$attachment_data[$key]['filesize'] = $this->sql_ary['filesize'];
 				}
 			}
 
