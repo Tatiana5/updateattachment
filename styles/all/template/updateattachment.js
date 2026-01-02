@@ -113,6 +113,19 @@ $(document).ready(function() {
 
 					link.attr('href', url).html("<img src='" + url + "&v=" + Date.now() + "' style='max-width: " + pai_max_width + "px; max-height: " + pai_max_height + "px;' alt='" + filename + "' />");
 					$update_row.find('.file-name').html(link);
+
+					if (pai_show_filename) {
+						$update_row.find('div a').attr('href', url).html(filename);
+						$('#file-list .attach-row:first-child .attach-controls div a').slice(1).each(function() {
+							$(this).parent().remove();
+						});
+					}
+
+					if (pai_show_rotate) {
+						$('#file-list .attach-row:first-child .attach-controls div input[id^=\'rotate_file\']').slice(1).each(function() {
+							$(this).parent().remove();
+						});
+					}
 				}
 			}
 		}
