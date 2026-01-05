@@ -38,5 +38,5 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, [
 	'UPDATE_ATTACHMENT'				=> 'Update attachment',
-	'UPDATE_TOO_MANY_ATTACHMENTS'	=> 'Выбрано более 1 файла',
+	'UPDATE_TOO_MANY_ATTACHMENTS'	=> 'More than 1 file selected',
 ]);
